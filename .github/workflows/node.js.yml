@@ -1,4 +1,4 @@
-name: Deploy on Server prod
+name: Deploy on Server Prod
 
 on:
   push:
@@ -14,51 +14,30 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repo
+      - name: Checkout the repos
         uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-
       - name: Build app
         run: CI=false npm run build
-
-      - name: Create SSH directory
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Verify target directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            mkdir -p ~/portfolio
-            ls -la ~/portfolio
-
-      - name: Copy files via SSH
+      - name: copy file via ssh
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: './build/'
+          password: ${{ secrets.PASSWORD_DEV }}
+          source: './'
           target: ~/portfolio
-
-      - name: Deploy using PM2
+      - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+          password: ${{ secrets.PASSWORD_DEV }}
+          script: |            
             cd ~/portfolio
-            pm2 reload pm2.deploy.json --update-env
+            pm2 reload pm2.deploy.json+
