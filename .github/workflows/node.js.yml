@@ -33,14 +33,14 @@ jobs:
           script: |
             mkdir -p ~/portfolio
             ls -la ~/portfolio
-      - name: Copy files via SSH
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
-          source: './'
-          target: ~/portfolio
+      # - name: Copy files via SSH
+      #   uses: appleboy/scp-action@v0.1.4
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PASSWORD_DEV }}
+      #     source: './'
+      #     target: ~/portfolio
       - name: Deploy using PM2
         uses: appleboy/ssh-action@master
         with:
