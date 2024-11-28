@@ -7,33 +7,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-on-dev:
+  deploy-on-prod:
     permissions:
       contents: read
-      pages: write
-      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repos
         uses: actions/checkout@v3
+      
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20
+      
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+      
       - name: Build app
         run: CI=false npm run build
-      - name: copy file via ssh
+      
+      - name: Copy build files via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST_DEV }}
           username: ${{ secrets.USER_DEV }}
           password: ${{ secrets.PASSWORD_DEV }}
-          source: './'
-          target: ~/portfolio
-      - name: Deploy using ssh
-        uses: appleboy/ssh-action@master
+          source: './build/' # Transférer uniquement le dossier build
+          target: ~/portfolio # Répertoire cible aligné avec les étapes suivantes
+      
+      - name: Deploy using SSH
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.HOST_DEV }}
           username: ${{ secrets.USER_DEV }}
