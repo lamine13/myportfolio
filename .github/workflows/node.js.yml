@@ -41,7 +41,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          source: ./build/
+          # source: ./build/
           target: ~/portfolio
           port: 22
           debug: true
