@@ -24,15 +24,15 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Build app
         run: CI=false npm run build
-      - name: Verify target directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
-          script: |
-            mkdir -p ~/portfolio
-            ls -la ~/portfolio
+      # - name: Verify target directory
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PASSWORD_DEV }}
+      #     script: |
+      #       mkdir -p ~/portfolio
+      #       ls -la ~/portfolio
       # - name: Copy files via SSH
       #   uses: appleboy/scp-action@v0.1.4
       #   with:
