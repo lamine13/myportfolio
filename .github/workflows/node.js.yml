@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.USER_DEV }}
           password: ${{ secrets.PASSWORD_DEV }}
           source: './'
-          target: ~/gie
+          target: ~/portfolio
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
