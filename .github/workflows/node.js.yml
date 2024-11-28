@@ -28,8 +28,9 @@ jobs:
       - name: Build app
         run: CI=false npm run build
 
-      - name: Add SSH private key
+      - name: Create SSH directory
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
