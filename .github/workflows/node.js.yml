@@ -14,33 +14,44 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repos
+      - name: Checkout the repo
         uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20
+
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
       - name: Build app
         run: CI=false npm run build
+
+      - name: Add SSH private key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Verify target directory
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             mkdir -p ~/portfolio
             ls -la ~/portfolio
+
       - name: Copy files via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
-          source: './'
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: './build/'
           target: ~/portfolio
+
       - name: Deploy using PM2
         uses: appleboy/ssh-action@master
         with:
