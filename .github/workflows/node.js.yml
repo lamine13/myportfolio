@@ -29,7 +29,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          password: ${{ secrets.PASSWORD_DEV }}
           script: |
             mkdir -p ~/portfolio
             ls -la ~/portfolio
@@ -38,7 +38,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          password: ${{ secrets.PASSWORD_DEV }}
           source: './'
           target: ~/portfolio
       - name: Deploy using PM2
