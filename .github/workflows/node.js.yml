@@ -7,14 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-on-dev:
+  deploy-on-prod:
     permissions:
       contents: read
       pages: write
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repos
+      - name: Checkout the repo
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -25,18 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Verify current directory
-        run: ls -l
-
       - name: Build app
         run: |
-          CI=false npm run build || exit 1
-          echo "Build completed successfully."
+          CI=false npm run build || { echo 'Build failed'; exit 1; }
 
-      - name: Check build output
+      - name: List directory contents
+        run: ls -l
+
+      - name: Verify build output
         run: ls -l ./build/
 
-      - name: Copy file via ssh
+      - name: Copy files via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
@@ -46,3 +45,13 @@ jobs:
           target: ~/portfolio
           port: 22
           debug: true
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ~/portfolio
+            pm2 reload pm2.deploy.json
