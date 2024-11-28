@@ -25,10 +25,15 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build app
-        run: CI=false npm run build
+      - name: Verify current directory
+        run: ls -l
 
-      - name: Verify build directory
+      - name: Build app
+        run: |
+          CI=false npm run build || exit 1
+          echo "Build completed successfully."
+
+      - name: Check build output
         run: ls -l ./build/
 
       - name: Copy file via ssh
