@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "my_portfolio",
+      "script": "npm",
+      "interpreter": "none",
+      "args": "run start"
+    }
+  ]
+}
