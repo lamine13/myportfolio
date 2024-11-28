@@ -32,8 +32,8 @@ jobs:
       - name: List directory contents
         run: ls -l
 
-      - name: Verify build output
-        run: ls -l ./build/
+      # - name: Verify build output
+      #   run: ls -l ./build/
 
       - name: Copy files via SSH
         uses: appleboy/scp-action@v0.1.4
@@ -41,7 +41,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          # source: ./build/
+          source: ./build/
           target: ~/portfolio
           port: 22
           debug: true
