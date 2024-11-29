@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.USERNAME_DEV }}
           password: ${{ secrets.PASSWORD_DEV }}
           source: './'
-          target: ~/var/www/portfolio
+          target: ../var/www/portfolio
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
@@ -39,5 +39,5 @@ jobs:
           username: ${{ secrets.USERNAME_DEV }}
           password: ${{ secrets.PASSWORD_DEV }}
           script: |            
-            cd ~/var/www/portfolio
+            cd ../var/www/portfolio
             pm2 reload pm2.deploy.json
