@@ -30,16 +30,14 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD_DEV }}
-          port: 22
           source: './'
-          target: ~/portfolio
+          target: ~/var/www/portfolio
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD_DEV }}
-          port: 22
           script: |            
-            cd ~/portfolio
+            cd ~/var/www/portfolio
             pm2 reload pm2.deploy.json
