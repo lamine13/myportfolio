@@ -13,31 +13,41 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
+    env:
+      HOST: ${{ secrets.HOST }}
+      USERNAME: ${{ secrets.USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD_DEV }}
     steps:
       - name: Checkout the repos
         uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20
+
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
       - name: Build app
         run: CI=false npm run build
-      - name: copy file via ssh
+
+      - name: Copy files via scp
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
-          source: './'
-          target: ~/portfolio
-      - name: Deploy using ssh
+          host: ${{ env.HOST }}
+          username: ${{ env.USERNAME }}
+          password: ${{ env.PASSWORD }}
+          source: './build/*'
+          target: '~/portfolio'
+
+      - name: Deploy using SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD_DEV }}
-          script: |            
+          host: ${{ env.HOST }}
+          username: ${{ env.USERNAME }}
+          password: ${{ env.PASSWORD }}
+          script: |
             cd ~/portfolio
-            pm2 reload pm2.deploy.json+
+            npm install -g pm2
+            pm2 reload pm2.deploy.json
