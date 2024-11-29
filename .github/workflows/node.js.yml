@@ -1,4 +1,4 @@
-name: Deploy on Server Prod
+name: Deploy on Server Production
 
 on:
   push:
@@ -13,41 +13,31 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
-    env:
-      HOST: ${{ secrets.HOST }}
-      USERNAME: ${{ secrets.USERNAME }}
-      PASSWORD: ${{ secrets.PASSWORD_DEV }}
     steps:
       - name: Checkout the repos
         uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-
       - name: Build app
         run: CI=false npm run build
-
-      - name: Copy files via scp
+      - name: copy file via ssh
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ env.HOST }}
-          username: ${{ env.USERNAME }}
-          password: ${{ env.PASSWORD }}
-          source: './build/*'
-          target: '~/portfolio'
-
-      - name: Deploy using SSH
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD_DEV }}
+          source: './'
+          target: ~/portfolio
+      - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.HOST }}
-          username: ${{ env.USERNAME }}
-          password: ${{ env.PASSWORD }}
-          script: |
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD_DEV }}
+          script: |            
             cd ~/portfolio
-            npm install -g pm2
             pm2 reload pm2.deploy.json
