@@ -30,6 +30,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD_DEV }}
+          port: 22
           source: './'
           target: ~/portfolio
       - name: Deploy using ssh
@@ -38,6 +39,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD_DEV }}
+          port: 22
           script: |            
             cd ~/portfolio
             pm2 reload pm2.deploy.json
