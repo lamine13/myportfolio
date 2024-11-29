@@ -1,11 +1,11 @@
 {
   "apps": [
     {
-      "name": "my_portfolio",
+      "name": "portfolio",
       "script": "npm",
       "interpreter": "none",
       "args": "run start",
-      "cwd": "./portefolio"
+      "cwd": "/portefolio"
       "env": {
         "NODE_ENV": "production"
       },
