@@ -4,7 +4,7 @@
       "name": "portfolio",
       "script": "npm",
       "interpreter": "none",
-      "args": "run start"
+      "args": "run build"
     }
   ]
 }
